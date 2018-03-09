@@ -991,7 +991,7 @@ if (! function_exists('view')) {
     }
 }
 if (! function_exists('genView')) {
-    /**
+    /*
      * Get the evaluated view contents for the given view.
      *
      * @param  string  $view
@@ -999,14 +999,26 @@ if (! function_exists('genView')) {
      * @param  array   $mergeData
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
+
     function genView($view = null, $data = [], $mergeData = [])
     {
         $factory = app(ViewFactory::class);
 
+        //dd($factory);
+
         if (func_num_args() === 0) {
             return $factory;
         }
+        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
+        {
+            return $factory->make($view, $data, $mergeData);
+        }
+        else
+        {   
+            $data =  array_merge($data, array('view' => $view));
+            $view = "universal_layout";
+            return $factory->make($view, $data, $mergeData);
+        }
 
-        return $factory->make($view, $data, $mergeData);
     }
 }

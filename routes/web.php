@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::get('test','UserController@test');
+Route::get('link_test','UserController@link_test');

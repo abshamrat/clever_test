@@ -15,7 +15,14 @@ class UserController extends Controller
 {
     public function test(Request $request)
     {
-
-    	return genView("test")->with("data","test");
+    	return genView("test",array('data' => "values"))->with("data","test");
+    }
+    public function link_test(Request $request)
+    {
+    	return genView("test",array('data' => "values"));
+    }
+    public function dashboard(Request $request)
+    {
+    	return genView("test",array('data' => "values"));
     }
 }

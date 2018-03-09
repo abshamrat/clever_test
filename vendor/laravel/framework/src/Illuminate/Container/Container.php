@@ -598,6 +598,7 @@ class Container implements ArrayAccess, ContainerContract
      */
     public function make($abstract, array $parameters = [])
     {
+        
         return $this->resolve($abstract, $parameters);
     }
 

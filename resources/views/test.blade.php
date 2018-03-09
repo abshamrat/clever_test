@@ -1,9 +1,1 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Title</title>
-</head>
-<body>
-	hello	
-</body>
-</html>
+	<a href="JavaScript:" clvr-href="link_test">{{$data}}</a>
