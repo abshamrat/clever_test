@@ -21,8 +21,5 @@ class UserController extends Controller
     {
     	return genView("test",array('data' => "values"));
     }
-    public function dashboard(Request $request)
-    {
-    	return genView("test",array('data' => "values"));
-    }
+   
 }
