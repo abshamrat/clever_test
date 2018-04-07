@@ -17,7 +17,7 @@
 	        	callback(xmlHttp.responseText);
 	        }
 	    }
-	    console.log(theUrl);
+	    console.log("URL "+ theUrl);
 	    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
 	    xmlHttp.setRequestHeader(this.xHeader,this.xHeadParam);
 	    xmlHttp.send(null);
@@ -37,13 +37,16 @@
 		var obj = this;
 		console.log(app.getAttribute("clvr-id"));
 		var anchors = document.querySelector("app > [clvr-href]");
-		console.log(anchors);
 		anchors.addEventListener("click",function(e){
 			e = e || window.event;
 			    var elem = e.target || e.srcElement,
 			        text = elem.textContent || text.innerText;
 			console.log(elem.innerHTML);
-			var url = location.origin+"/"+obj.take(elem,obj.href);
+			var slashUrl  = obj.take(elem,obj.href);
+			if (slashUrl[0] != "/") {
+				slashUrl="/"+slashUrl;
+			}
+			var url = location.origin+slashUrl;
 			obj.httpGetAsync(url,function(data) {
 				console.log(data);
 				if (history.pushState) {
@@ -92,3 +95,50 @@
         return pushState.apply(history, arguments);
     }
 })(window.history);
+
+
+(function () {
+
+	if(window.history && history.pushState){ // check for history api support
+		window.addEventListener('load', function(){
+			// create history states
+			history.pushState(-1, null); // back state
+			history.pushState(0, null); // main state
+			history.pushState(1, null); // forward state
+			history.go(-1); // start in main state
+					
+			this.addEventListener('popstate', function(event, state){
+				// check history state and fire custom events
+				console.log("Pop state working");
+				if(state = event.state){
+		
+					event = document.createEvent('Event');
+					event.initEvent(state > 0 ? 'next' : 'previous', true, true);
+					this.dispatchEvent(event);
+					
+					// reset state
+					history.go(-state);
+				}
+			}, false);
+		}, false);
+	}
+
+	window.addEventListener('popstate', function(event) {
+	    // The popstate event is fired each time when the current history entry changes.
+
+	    //var r = confirm("You pressed a Back button! Are you sure?!");
+
+	    // if (r == true) {
+	    //     // Call Back button programmatically as per user confirmation.
+	    //     history.back();
+	    //     // Uncomment below line to redirect to the previous page instead.
+	    //     // window.location = document.referrer // Note: IE11 is not supporting this.
+	    // } else {
+	    //     // Stay on the current page.
+	    //     history.pushState(null, null, window.location.pathname);
+	    // }
+	    console.log(event);
+	    //history.pushState(null, null, window.location.pathname);
+
+	}, false);
+})();
